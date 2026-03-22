@@ -1,0 +1,120 @@
+# =========================
+# Frontend (Node / React)
+# =========================
+node_modules/
+dist/
+dist-ssr/
+*.local
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# =========================
+# Backend (Python / Django)
+# =========================
+venv/
+env/
+ENV/
+.venv
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+.Python
+build/
+develop-eggs/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Django files
+db.sqlite3
+staticfiles/
+media/
+*.log
+
+# =========================
+# Machine Learning Models
+# (VERY LARGE FILES - Download from HuggingFace)
+# =========================
+backend/arabizi_backend/models/
+models/
+*.pt
+*.bin
+*.onnx
+*.h5
+*.ckpt
+*.pth
+*.safetensors
+optimizer.pt
+rng_state.pth
+scaler.pt
+scheduler.pt
+
+# =========================
+# Secrets (NEVER push)
+# =========================
+.env
+.env.*
+!.env.example
+.env.local
+.env.*.local
+
+# =========================
+# OS / Editors
+# =========================
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+Thumbs.db
+.gradle
+.project
+.settings
+.classpath
+
+# =========================
+# IDE specific files
+# =========================
+*.iml
+*.sublime-workspace
+*.sublime-project
+
+# =========================
+# Misc
+# =========================
+.cache/
+.pytest_cache/
+htmlcov/
+.coverage
+.hypothesis/
+instance/
+.webassets-cache
+.scrapy
+docs/_build/
+target/
+.ipynb_checkpoints
+.pytype/
+.mypy_cache/
+dmypy.json
+.pyre/
