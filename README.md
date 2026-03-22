@@ -7,6 +7,10 @@
 ![NLP](https://img.shields.io/badge/NLP-Transformer%20Models-orange)
 ![Seq2Seq](https://img.shields.io/badge/Architecture-Seq2Seq-green)
 
+```markdown
+[![Franco2Fosha Preview](./preview.png)](./preview.png)
+```
+
 ## 📖 Overview
 
 **Franco2Fosha** is a comprehensive end-to-end neural NLP pipeline for **direct translation** of **Algerian Arabizi** (Latin-script Arabic dialect) to two output targets:
