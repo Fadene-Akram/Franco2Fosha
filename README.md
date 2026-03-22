@@ -11,7 +11,7 @@
 | | |
 |:---:|:---:|
 | ![preview2](./assets/preview-2.png) | ![preview3](./assets/preview-3.png) |
-| _Arabizi Transliteation_ | _Darija Transliteration_ |
+| _Arabizi Transliteration_ | _Darija Transliteration_ |
 | ![preview4](./assets/preview-4.png) | ![preview5](./assets/preview-5.png) |
 | _MSA Transliteration_ | _Corpus Contribution_ |
 
