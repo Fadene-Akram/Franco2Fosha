@@ -7,8 +7,11 @@
 ![NLP](https://img.shields.io/badge/NLP-Transformer%20Models-orange)
 ![Seq2Seq](https://img.shields.io/badge/Architecture-Seq2Seq-green)
 
-
-![Franco2Fosha Preview](./preview.png)
+![Franco2Fosha Preview](./assets/preview-1.png)
+![Franco2Fosha Preview](./assets/preview-2.png)
+![Franco2Fosha Preview](./assets/preview-3.png)
+![Franco2Fosha Preview](./assets/preview-4.png)
+![Franco2Fosha Preview](./assets/preview-5.png)
 
 ## 📖 Overview
 
