@@ -1,9 +1,8 @@
 # Franco2Fosha: Neural Translation of Algerian Arabizi to Darija and Modern Standard Arabic
 
-![License](https://img.shields.io/badge/license-MIT-green)
+![NLP](https://img.shields.io/badge/NLP-Transformer%20Models-orange)
 ![Python](https://img.shields.io/badge/python-3.8%2B-blue)
 ![React](https://img.shields.io/badge/react-18%2B-blue)
-![NLP](https://img.shields.io/badge/NLP-Transformer%20Models-orange)
 ![Seq2Seq](https://img.shields.io/badge/Architecture-Seq2Seq-green)
 
 ![Franco2Fosha Main Preview](./assets/preview-1.png)
