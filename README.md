@@ -7,11 +7,13 @@
 ![NLP](https://img.shields.io/badge/NLP-Transformer%20Models-orange)
 ![Seq2Seq](https://img.shields.io/badge/Architecture-Seq2Seq-green)
 
-![Franco2Fosha Preview](./assets/preview-1.png)
-![Franco2Fosha Preview](./assets/preview-2.png)
-![Franco2Fosha Preview](./assets/preview-3.png)
-![Franco2Fosha Preview](./assets/preview-4.png)
-![Franco2Fosha Preview](./assets/preview-5.png)
+![Franco2Fosha Main Preview](./assets/preview-1.png)
+| | |
+|:---:|:---:|
+| ![preview2](./assets/preview-2.png) | ![preview3](./assets/preview-3.png) |
+| _MSA Translation_ | _Side-by-Side Comparison_ |
+| ![preview4](./assets/preview-4.png) | ![preview5](./assets/preview-5.png) |
+| _Dataset Statistics_ | _System Architecture_ |
 
 ## 📖 Overview
 
