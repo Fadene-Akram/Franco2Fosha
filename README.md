@@ -891,7 +891,7 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 | --------------------------------- | ------------------------------------------------------------------ |
 | **Zyad Kherraf**                  | Data scraping, model fine-tuning, project management, final report |
 | **Abdeldjalil Elazizi**           | Data generation, cleaning, seq2seq fine-tuning                     |
-| **Akram Faden**                   | Data scraping, generation, cleaning, NLLB fine-tuning              |
+| **Akram Fadene**                   | Data scraping, generation, cleaning, NLLB fine-tuning              |
 | **Nour el houda Imene Mahfoudia** | Data scraping, generation, platform development                    |
 | **Semhane Kheffache**             | Data scraping, generation, LLM fine-tuning                         |
 | **Safa ACHOUR**                   | Data scraping, generation, NLLB fine-tuning, documentation         |
