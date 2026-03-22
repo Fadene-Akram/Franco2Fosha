@@ -1,20 +1,20 @@
-# Franco2Fosha: Neural Two-Stage Translation of Algerian Arabizi to Darija and Modern Standard Arabic
+# Franco2Fosha: Neural Translation of Algerian Arabizi to Darija and Modern Standard Arabic
 
 ![ENSIA](https://img.shields.io/badge/ENSIA-NLP%20%26%20Data%20Science%20Project-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Python](https://img.shields.io/badge/python-3.8%2B-blue)
 ![React](https://img.shields.io/badge/react-18%2B-blue)
 ![NLP](https://img.shields.io/badge/NLP-Transformer%20Models-orange)
-![Seq2Seq](https://img.shields.io/badge/Architecture-Two--Stage%20Seq2Seq-green)
+![Seq2Seq](https://img.shields.io/badge/Architecture-Seq2Seq-green)
 
 ## 📖 Overview
 
-**Franco2Fosha** is a comprehensive end-to-end neural NLP pipeline for **two-stage translation** of **Algerian Arabizi** (Latin-script Arabic dialect):
+**Franco2Fosha** is a comprehensive end-to-end neural NLP pipeline for **direct translation** of **Algerian Arabizi** (Latin-script Arabic dialect) to two output targets:
 
-- **Stage 1: Arabizi → Algerian Darija** (Arabic script - dialectal form)
-- **Stage 2: Darija → Modern Standard Arabic (MSA)** (formal Arabic - standardized)
+- **Arabizi → Algerian Darija** (Arabic script - dialectal form)
+- **Arabizi → Modern Standard Arabic (MSA)** (formal Arabic - standardized)
 
-Optionally, users can stop at Stage 1 for dialectal output or proceed to Stage 2 for formal standardized output.
+Users can translate to either Darija (to preserve dialectal form) or MSA (to standardize to formal Arabic) in a single inference step.
 
 This project bridges the critical gap between informal, user-generated digital content and formal linguistic resources for low-resource North African Arabic dialects.
 
@@ -27,19 +27,16 @@ This project bridges the critical gap between informal, user-generated digital c
 - **Script Mismatch**: Standard NLP tools trained on Arabic script fail catastrophically on Romanized text (domain shift problem)
 - **Code-Switching Intensity**: 35% of sentences contain French loanwords, requiring multilingual understanding
 
-### Our Solution: Two-Stage Sequential Pipeline
+### Our Solution: Parallel Translation Models
 
-Franco2Fosha solves the dual challenge through **a two-stage sequential neural pipeline**:
+Franco2Fosha addresses this challenge using **two parallel neural architectures**, each specialized for its target:
 
-1. **Stage 1 - Transliteration Module** (ByT5): Character-level Arabizi → Algerian Darija (orthographic normalization)
-2. **Stage 2 - Normalization Module** (mBART-Large-50): Darija → Modern Standard Arabic (semantic translation)
+1. **ByT5-Small Model**: Arabizi → Algerian Darija (character-level transliteration)
+2. **mBART-Large-50 Model**: Arabizi → Modern Standard Arabic (multilingual translation)
 
-Users can:
+Users select which target they need (Darija or MSA) and the corresponding model performs direct inference on the Arabizi input. Both models process the input independently and in parallel.
 
-- **Stop at Stage 1** to get dialectal Algerian Darija output
-- **Continue to Stage 2** to get formal Modern Standard Arabic output
-
-This architecture leverages the strengths of distinct transformer architectures: **token-free byte-level processing** for spelling robustness + **multilingual semantic models** for formal translation.
+This architecture leverages specialized transformers: **byte-level processing** for orthographic normalization to Darija + **multilingual semantic models** for formal MSA translation.
 
 ---
 
@@ -337,34 +334,44 @@ Phase 3: Human Verification (30k sampled)
 
 **Methodology**: Knowledge distillation from 1T-parameter LLMs to task-specific models
 
-### 4. **Sequential Two-Stage Translation Architecture**
+### 4. **Parallel Dual-Model Translation Architecture**
 
-**NLP Architecture Innovation**: Unified pipeline supporting both dialectal and formal output
+**NLP Architecture Innovation**: Specialized models for dialectal and formal output
 
-**Translation Capabilities**:
+**Translation Models**:
 
 ```
 Arabizi Input
 
-Transliteration Module (ByT5)
-↓
-Algerian Darija (Stage 1 Output - Optional Stop)
+┌─────────────────────────┐
+│   ByT5-Small Model      │
+│ (Character-Level)       │
+│ Arabizi → Darija        │
+└──────────┬──────────────┘
+           │
+    [Darija Output]
 
-Normalization Module (mBART)
-↓
-Modern Standard Arabic (Stage 2 Output - Final)
+
+┌─────────────────────────┐
+│  mBART-Large-50 Model   │
+│ (Multilingual Semantic) │
+│ Arabizi → MSA           │
+└──────────┬──────────────┘
+           │
+     [MSA Output]
 ```
 
-**Stage-Based Output**:
+**Model Selection**:
 
-- **Stage 1 Only** (Arabizi → Darija): For dialectal preservation, regional NLP tasks, cultural authenticity
-- **Stage 1 + Stage 2** (Arabizi → MSA): For formal normalization, standardized processing, broader compatibility
+- Users choose target output: **Darija** (dialectal preservation) or **MSA** (formal standardization)
+- Corresponding model handles direct Arabizi → Target translation
+- No intermediate representations needed
 
-**Semantic Lifting**:
+**Performance**:
 
-- Model learns to replace dialectal vocabulary with formal equivalents
-- Example: `labas bik` (colloquial) → `bikhair` (intermediate Darija) → proper MSA equivalent
-- Demonstrates semantic understanding beyond syntactic transliteration
+- **Darija inference**: ~250ms (ByT5 only)
+- **MSA inference**: ~1.3s (mBART only)
+- Both models optimize for their specific target language
 
 ---
 
@@ -395,7 +402,7 @@ Modern Standard Arabic (Stage 2 Output - Final)
 ┌─────────────────────────────────────────────────────────┐
 │              User Interface Layer (Web)                │
 │  ┌──────────────┐          ┌──────────────────────┐   │
-│  │ Input Field  │ ────────▶│ Target Mode Select   │   │
+│  │ Input Field  │ ────────▶│ Target Model Select  │   │
 │  │  (Arabizi)   │          │ (Darija / MSA)       │   │
 │  └──────────────┘          └──────────────────────┘   │
 └────────────────────────┬───────────────────────────────┘
@@ -410,45 +417,44 @@ Modern Standard Arabic (Stage 2 Output - Final)
 └────────────────────────┬───────────────────────────────┘
                          │
 ┌────────────────────────▼───────────────────────────────┐
-│        Neural Inference Layer (Two-Stage)              │
-│  ┌──────────────────────────┐                          │
-│  │   STAGE 1: ByT5-Small    │                          │
-│  │ (Transliteration)        │                          │
-│  │                          │                          │
-│  │ Arabizi → Darija         │                          │
-│  │ (300M params)            │                          │
-│  └────────┬─────────────────┘                          │
-│           │                                            │
-│           ├─→ [OUTPUT: Darija] (Optional Stop)        │
-│           │                                            │
-│           ▼                                            │
-│  ┌──────────────────────────┐                          │
-│  │   STAGE 2: mBART-Large   │                          │
-│  │ (Translation/Norm)       │                          │
-│  │                          │                          │
-│  │ Darija → MSA             │                          │
-│  │ (610M params)            │                          │
-│  └──────────────────────────┘                          │
-│           │                                            │
-│           └─→ [OUTPUT: MSA] (Final)                   │
+│      Neural Inference Layer (Parallel Models)          │
+│                                                         │
+│  IF target = "darija":                                │
+│  ┌──────────────────────────┐                         │
+│  │   ByT5-Small             │                         │
+│  │ (Character-Level)        │                         │
+│  │ Arabizi → Darija         │                         │
+│  │ (300M params)            │                         │
+│  │ ~250ms inference         │                         │
+│  └──────────────────────────┘                         │
+│                                                         │
+│  ELSE IF target = "msa":                              │
+│  ┌──────────────────────────┐                         │
+│  │   mBART-Large-50         │                         │
+│  │ (Multilingual Semantic)  │                         │
+│  │ Arabizi → MSA            │                         │
+│  │ (610M params)            │                         │
+│  │ ~1.3s inference          │                         │
+│  └──────────────────────────┘                         │
+│                                                         │
 └────────────────────────┬───────────────────────────────┘
                          │
 ┌────────────────────────▼───────────────────────────────┐
 │        Output Presentation & Evaluation Layer          │
 │  ┌──────────────────────────────────────────────────┐ │
-│  │ • Confidence Score (stage-wise)                  │ │
+│  │ • Confidence Score (model-specific)              │ │
 │  │ • Side-by-Side Visualization (LTR vs RTL)       │ │
-│  │ • Stage Information (which stages executed)      │ │
+│  │ • Model Information (which model used)           │ │
 │  │ • Active Feedback Loop (Thumbs Up/Down)         │ │
 │  │ • Copy-to-Clipboard Functionality               │ │
 │  └──────────────────────────────────────────────────┘ │
 └────────────────────────────────────────────────────────┘
 ```
 
-**Two-Stage Pipeline Flow**:
+**Model Selection Flow**:
 
-- **User selects "Darija"** → Execute Stage 1 only (faster, ~250ms)
-- **User selects "MSA"** → Execute Stage 1 + Stage 2 (complete pipeline, ~1.5s)
+- **User selects "Darija"** → ByT5-Small performs direct Arabizi→Darija translation (~250ms)
+- **User selects "MSA"** → mBART-Large-50 performs direct Arabizi→MSA translation (~1.3s)
 
 ---
 
@@ -562,15 +568,15 @@ for repo_id, local_path in models:
 1. **Navigate to the home page**
 2. **Enter Arabizi text** (Latin characters + numbers)
 3. **Select target output**:
-   - Algerian Darija (dialectal form - Stage 1 only)
-   - Modern Standard Arabic (formal - Stage 1 + Stage 2)
+   - Algerian Darija (dialectal form - uses ByT5)
+   - Modern Standard Arabic (formal - uses mBART)
 4. **Click "TRANSLITERATE"**
 5. **Review results** with confidence score & side-by-side comparison
 6. **Provide feedback** (Thumbs Up/Down for continuous improvement)
 
 ### Real Input/Output Examples
 
-| Arabizi Input            | Darija Output (Stage 1) | MSA Output (Stage 1+2)     | Notes                             |
+| Arabizi Input            | Darija Output (ByT5)    | MSA Output (mBART)         | Notes                             |
 | ------------------------ | ----------------------- | -------------------------- | --------------------------------- |
 | `salem 3likom`           | `سلام عليكم`            | `السلام عليكم`             | Greeting                          |
 | `labas bik?`             | `لابس بيك؟`             | `كيف حالك؟`                | Semantic shift: colloquial→formal |
@@ -578,65 +584,6 @@ for repo_id, local_path in models:
 | `nchallah`               | `انشاء الله`            | `إن شاء الله`              | Religious phrase                  |
 | `khassni nraq9 f imdina` | `خاصني نرقق في المدينة` | `يجب أن أستريح في المدينة` | Complex colloquialism             |
 | `wah 3lah ki thouba`     | `واه على الله كي ثوبة`  | `يا إلهي كم هو جميل`       | Regional variation (Oran)         |
-
-### API Endpoints
-
-#### POST /api/transliterate/ - Two-Stage Translation
-
-**Request 1: Arabizi → Darija (Stage 1 Only)**
-
-```bash
-curl -X POST http://localhost:8000/api/transliterate/ \
-  -H "Content-Type: application/json" \
-  -d '{
-    "text": "salem 3likom",
-    "source": "arabizi",
-    "target": "darija"
-  }'
-```
-
-**Response**:
-
-```json
-{
-  "input": "salem 3likom",
-  "output": "سلام عليكم",
-  "confidence": 0.96,
-  "stage": 1,
-  "processing_time_ms": 250,
-  "target": "darija"
-}
-```
-
-**Request 2: Arabizi → MSA (Full Pipeline: Stage 1 + Stage 2)**
-
-```bash
-curl -X POST http://localhost:8000/api/transliterate/ \
-  -H "Content-Type: application/json" \
-  -d '{
-    "text": "salem 3likom",
-    "source": "arabizi",
-    "target": "msa"
-  }'
-```
-
-**Response**:
-
-```json
-{
-  "input": "salem 3likom",
-  "stage_1_output": "سلام عليكم",  # Darija (intermediate)
-  "output": "السلام عليكم",       # Final MSA
-  "stage_1_confidence": 0.96,
-  "stage_2_confidence": 0.92,
-  "overall_confidence": 0.94,
-  "processing_time_ms": 1520,
-  "stages_executed": 2,
-  "target": "msa"
-}
-```
-
----
 
 ## 📁 Project Structure
 
@@ -681,46 +628,8 @@ Franco2Fosha/
     │
     ├── manage.py
     ├── requirements.txt
-    ├── .env.example
     └── db.sqlite3 (local only, not pushed)
 ```
-
----
-
-## 🔧 Configuration
-
-### Backend (.env.example)
-
-```env
-# Django Settings
-DEBUG=True
-SECRET_KEY=your-secret-key-here
-ALLOWED_HOSTS=localhost,127.0.0.1
-
-# Database
-DB_ENGINE=django.db.backends.sqlite3
-DB_NAME=db.sqlite3
-
-# Model Paths
-BYTTF5_MODEL_PATH=./models/arabizi-to-darija
-MBART_MODEL_PATH=./models/Zyadkh-arabizi-translator
-
-# CORS
-CORS_ALLOWED_ORIGINS=http://localhost:3000,http://127.0.0.1:3000
-
-# API
-API_TIMEOUT=30
-MAX_TEXT_LENGTH=2000
-```
-
-### Frontend (.env)
-
-```env
-REACT_APP_API_URL=http://localhost:8000/api
-REACT_APP_ENABLE_FEEDBACK=true
-```
-
----
 
 ## 📊 Dataset Information
 
@@ -830,6 +739,21 @@ Analysis: Model correctly resolved ambiguous '3' as 'ع' based on context
 - **RTL Support**: react-i18next (Arabic localization)
 - **State Management**: React Hooks / Redux (optional)
 
+### MLOps & Infrastructure
+
+- **Model Hub**: HuggingFace Model Hub
+- **Experiment Tracking**: Weights & Biases (hyperparameter tuning)
+- **Model Quantization**: ONNX, TensorRT (inference optimization)
+- **GPU Support**: CUDA 11.8+, cuDNN 8.0+
+
+### Deployment
+
+- **Backend**: Docker + Docker Compose
+- **Containerization**: Production-grade Django + Gunicorn
+- **Cloud Options**: AWS, GCP, Azure, Hugging Face Spaces
+
+---
+
 ## ⚠️ Known Limitations & Future Work
 
 ### Current Limitations
@@ -847,16 +771,16 @@ Analysis: Model correctly resolved ambiguous '3' as 'ع' based on context
 
 - [ ] **Language Identification (LID)**: Detect and preserve foreign language segments (French/English)
 - [ ] **Reinforcement Learning from Human Feedback (RLHF)**: Use feedback collected from web interface to train reward models for continuous improvement via PPO
-- [ ] **Tamazight/Kabyle Support**: Expand to include Berber language variants in Latin script
+- [ ] **Tamazight/Kabyle Support**: Expand to include Berber language variants in Latin script for both models
 - [ ] **Cross-Lingual Transfer**: Fine-tune on related dialects (Moroccan, Tunisian) leveraging multilingual representations
-- [ ] **Model Distillation**: Create lightweight 50M-100M parameter versions for edge deployment and faster inference
-- [ ] **Ensemble Methods**: Combine ByT5 predictions with alternative transliterators via learned weighted averaging
-- [ ] **Fine-tune NLLB-200-Distilled**: Leverage facebook/nllb-200-distilled-600M for improved MSA translation in Stage 2
+- [ ] **Model Distillation**: Create lightweight 50M-100M parameter versions of both ByT5 and mBART for edge deployment
+- [ ] **Ensemble Methods**: Combine predictions from both ByT5 and mBART for MSA output via learned weighted averaging
+- [ ] **Fine-tune NLLB-200-Distilled**: Develop NLLB-based alternative for MSA translation as complement to mBART
 - [ ] **Contextual Confidence Estimation**: Learn confidence scores from model uncertainty rather than perplexity alone
-- [ ] **Active Learning**: Identify high-uncertainty samples from user feedback for targeted re-training
-- [ ] **Zero-Shot Cross-Dialect Transfer**: Test generalization to unseen Algerian regional dialects
-- [ ] **Morphological Analysis**: Extract Arabic root-pattern structures to improve semantic understanding
-- [ ] **Code-Switching Language Model**: Train separate LM for code-switched sentences to handle dense mixing
+- [ ] **Active Learning**: Identify high-uncertainty samples from user feedback for targeted re-training of both models
+- [ ] **Zero-Shot Cross-Dialect Transfer**: Test generalization of both models to unseen Algerian regional dialects
+- [ ] **Morphological Analysis**: Extract Arabic root-pattern structures to improve semantic understanding in both models
+- [ ] **Code-Switching Language Model**: Train separate LM for code-switched sentences to improve both model inputs
 
 ---
 
@@ -900,7 +824,7 @@ Venue: LREC, ACL Shared Task (Language Resources)
 ```bibtex
 @inproceedings{franco2fosha2026,
   title={Franco2Fosha: Neural Multilingual Translation of Algerian Arabizi to Darija and Modern Standard Arabic},
-  author={Fadene Akram ,Kherraf Zyad , Elazizi Abdeldjalil, Mahfoudia Nour el houda Imene, Kheffache Semhane, ACHOUR Safa},
+  author={Fadene Akram, Kherraf Zyad, Elazizi Abdeldjalil, Mahfoudia Nour el houda Imene, Kheffache Semhane, ACHOUR Safa},
   booktitle={NLP Course Project, National Higher School of Artificial Intelligence (ENSIA)},
   year={2026},
   url={https://github.com/Fadene-Akram/Franco2Fosha}
@@ -955,6 +879,12 @@ We welcome contributions! Please follow these steps:
 
 ---
 
+## 📝 License
+
+This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
+
+---
+
 ## 👨‍💻 Team
 
 | Member                            | Contribution                                                       |
@@ -965,14 +895,3 @@ We welcome contributions! Please follow these steps:
 | **Nour el houda Imene Mahfoudia** | Data scraping, generation, platform development                    |
 | **Semhane Kheffache**             | Data scraping, generation, LLM fine-tuning                         |
 | **Safa ACHOUR**                   | Data scraping, generation, NLLB fine-tuning, documentation         |
-
----
-
-## 🙏 Acknowledgments
-
-- **The National Higher School of Artificial Intelligence (ENSIA)** for institutional support
-- **HuggingFace** for pre-trained models and infrastructure
-- **Google & OpenAI** for Gemini 3 Pro and Claude 3.5 LLMs used in data annotation
-- **All Algerian native speakers** who contributed to data verification
-
----
